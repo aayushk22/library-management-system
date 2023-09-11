@@ -1,5 +1,6 @@
-package com.example.librarymanagementsystem;
+package com.example.librarymanagementsystem.model;
 
+import com.example.librarymanagementsystem.Enum.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.Getter;
@@ -16,15 +17,23 @@ import lombok.experimental.FieldDefaults;
 
 public class Student {
 
+
     @Id // this annotation will set this attribute as primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //will automatically generate the id by the database
     int regNo;
 
     String name;
 
     int age;
 
+    @Column(unique = true, nullable = false) //will not allow user to add a duplicate email or a null value
     String email;
 
     @Enumerated(EnumType.STRING) //will force the entry in the table to show the exact gender instead of 0/1/2 which is set as default by using the enum
     Gender gender;
+
+    //connecting parent to child
+    //cascade will apply the saving function to the table for the library card as well
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL) //one to one relationship b/w student to library card
+    LibraryCard libraryCard;
 }
